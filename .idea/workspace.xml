@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0ff22070-029c-4833-a418-80340215264c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../AT/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="0ff22070-029c-4833-a418-80340215264c" name="Default Changelist" comment="Managing of JSON data and quiz done.">
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MicroLearningPlatform/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../MicroLearningPlatform/__pycache__/__init__.cpython-36.pyc" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../MicroLearningPlatform/__pycache__/settings.cpython-36.pyc" beforeDir="false" />
@@ -5772,6 +5773,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/ElemendBot$python_main.coverage" NAME="main Coverage Results" MODIFIED="1570690737872" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ElemendBot$main.coverage" NAME="main Coverage Results" MODIFIED="1570699136904" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -5797,8 +5799,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="553">
-              <caret line="113" selection-start-line="113" selection-end-line="113" />
+            <state relative-caret-position="365">
+              <caret line="96" column="122" selection-start-line="94" selection-start-column="16" selection-end-line="96" selection-end-column="122" />
               <folding>
                 <element signature="e#0#68#0" expanded="true" />
               </folding>
@@ -5809,8 +5811,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/todobot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="720">
-              <caret line="52" selection-start-line="52" selection-end-line="75" selection-end-column="39" />
+            <state relative-caret-position="-361">
+              <caret line="46" selection-start-line="46" selection-end-line="49" selection-end-column="16" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -5833,6 +5835,9 @@
       <find>done</find>
       <find>get_updates</find>
       <find>keyboard</find>
+      <find>AT</find>
+      <find>URL</find>
+      <find>updates</find>
     </findStrings>
     <replaceStrings>
       <replace>URL_AT</replace>
@@ -5847,6 +5852,7 @@
         <option value="$PROJECT_DIR$/echobot.py" />
         <option value="$PROJECT_DIR$/dbhelper.py" />
         <option value="$PROJECT_DIR$/todobot.py" />
+        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
@@ -5863,7 +5869,17 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="ElemendBot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ElemendBot" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope" />
     </panes>
   </component>
@@ -5940,31 +5956,48 @@
       <option name="project" value="LOCAL" />
       <updated>1570691492119</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Managing of JSON data and quiz done.">
+      <created>1570692695780</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1570692695780</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40899000" />
+    <option name="totallyTimeSpent" value="47000000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="1977" y="-4" width="1863" height="1084" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15575124" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3291536" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3291536" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.84975237" visible="true" weight="0.2570533" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Docker" order="7" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3291536" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49972484" weight="0.3291536" />
+      <window_info anchor="bottom" id="Docker" order="7" sideWeight="0.49972484" weight="0.3291536" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49972484" weight="0.3291536" />
       <window_info anchor="bottom" id="Database Changes" order="9" weight="0.3291536" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.338558" />
-      <window_info anchor="bottom" id="Python Console" order="12" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.15024766" side_tool="true" weight="0.3291536" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49972484" weight="0.26541275" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.3291536" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -5997,22 +6030,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/todobot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="553">
-          <caret line="113" selection-start-line="113" selection-end-line="113" />
+        <state relative-caret-position="-361">
+          <caret line="46" selection-start-line="46" selection-end-line="49" selection-end-column="16" />
           <folding>
-            <element signature="e#0#68#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/todobot.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="52" selection-start-line="52" selection-end-line="75" selection-end-column="39" />
+        <state relative-caret-position="365">
+          <caret line="96" column="122" selection-start-line="94" selection-start-column="16" selection-end-line="96" selection-end-column="122" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#68#0" expanded="true" />
           </folding>
         </state>
       </provider>

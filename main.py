@@ -87,14 +87,14 @@ def build_quiz(contents, bot, update, chat_id):
         index = 0
         while True:
             updates = get_updates(last_update_id)
-            if len(updates["result"]) > 0:
+            if (len(updates["result"])) > 0:
                 last_update_id = get_last_update_id(updates) + 1
                 time.sleep(0.5)
                 if index+1 >= 3:
                     break
-            else:
-                index = index + 1
-                send_message("Question " + str(index) + ": " + contents['quiz'][index]['question'], chat_id, keyboard)
+                else:
+                    index = index + 1
+                    send_message("Question " + str(index) + ": " + contents['quiz'][index]['question'], chat_id, keyboard)
 
 
 
