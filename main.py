@@ -98,7 +98,7 @@ def get_mc(bot, update):  # Get the micro content json
     markup = telegram.ReplyKeyboardRemove(selective=False)  # To remove the keyboard buttons from the previous interaction
     bot.send_message(chat_id, "Hi! You are going to start the micro content! ", reply_markup=markup)
     bot.send_message(chat_id=chat_id, text="Micro content: "+title)
-    #  bot.send_video(chat_id=chat_id, video="http://178.79.170.232:8000/micro_content_manager/static/videos/RecordRTC-2019914-6v15d09xs1f.webm")
+    # bot.send_video(chat_id=chat_id, video="http://178.79.170.232:8000/micro_content_manager/static/videos/RecordRTC-2019914-6v15d09xs1f.webm")
 
 
     bot.send_message(chat_id=chat_id, text=explanation)
