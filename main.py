@@ -1,8 +1,12 @@
+# Author: Inao Latourrette Garcia
+# Contact: inao.latourrette@gmail.com
+# GitHub: https://github.com/InaoLatu
+import logging
 import types
 
 import telegram
-from telegram import Message
-from telegram.ext import Updater, InlineQueryHandler, CommandHandler
+from telegram import Message, ReplyKeyboardRemove, ReplyKeyboardMarkup
+from telegram.ext import Updater, InlineQueryHandler, CommandHandler, ConversationHandler, MessageHandler, Filters
 import requests
 import re
 import urllib
@@ -14,6 +18,13 @@ URL_AT = "http://178.79.170.232:8000/json?content="
 TOKEN = "729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0"
 URL_bot = "https://api.telegram.org/bot{}/".format(TOKEN)
 
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
+
+
+Q1, Q2, Q3, END_QUIZ = range(4)
 
 def pic(bot, update):
     contents = requests.get('https://random-d.uk/api/v2/random').json()
@@ -26,20 +37,6 @@ def get_url(url):
     response = requests.get(url)
     content = response.content.decode("utf8")
     return content
-
-
-def get_json_from_url(url):
-    content = get_url(url)
-    js = json.loads(content)
-    return js
-
-
-def get_updates(offset=None):
-    url = URL_bot + "getUpdates?timeout=10"
-    if offset:
-        url += "&offset={}".format(offset)
-    js = get_json_from_url(url)
-    return js
 
 
 def get_last_update_id(updates):
@@ -57,62 +54,102 @@ def send_message(text, chat_id, reply_markup=None):
     get_url(url)
 
 
-def handle_updates(updates, index, contents, chat_id, keyboard):
-    for update in updates["result"]:
-        text = update["message"]["text"]
-        chat = update["message"]["chat"]["id"]
-        send_message("Question " + str(index) + ": " + contents['quiz'][index]['question'], chat_id, keyboard)
-
-
 def build_keyboard(items):
     keyboard = [[item] for item in items]
     reply_markup = {"keyboard": keyboard, "one_time_keyboard": True}
     return json.dumps(reply_markup)
 
-
-def build_quiz(contents, bot, update, chat_id):
-    keyboard = build_keyboard(['A', 'B', 'C'])
-    send_message("Question " + str(0) + ": " + contents['quiz'][0]['question'], chat_id, keyboard)
-    for index, item in enumerate(contents["quiz"]):
-        last_update_id = None
-        index = 0
-        while True:
-            updates = get_updates(last_update_id)
-            time.sleep(1)
-            if (len(updates["result"])) > 0:
-                last_update_id = get_last_update_id(updates) + 1
-                if index+1 >= 3:
-                    break
-                else:
-                    index = index + 1
-                    send_message("Question " + str(index) + ": " + contents['quiz'][index]['question'], chat_id, keyboard)
+def error(update, context):
+    """Log Errors caused by Updates."""
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
-def get_mc(bot, update):  # Get the micro content json
+def q2(update, context):
     contents = requests.get('http://178.79.170.232:8000/json?content=1').json()
+    reply_keyboard = ['A', 'B', 'C']
+    update.message.reply_text(
+        "Question " + str(2) + ": " + contents['quiz'][1]['question'],
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+    return Q3
+
+
+def q3(update, context):
+    contents = requests.get('http://178.79.170.232:8000/json?content=1').json()
+    reply_keyboard = ['A', 'B', 'C']
+    update.message.reply_text(
+        "Question " + str(3) + ": " + contents['quiz'][2]['question'],
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+    return END_QUIZ
+
+
+def end_quiz(update, context):
+    update.message.reply_text("CONGRATS! You have completed the micro content!")
+    return ConversationHandler.END
+
+
+def cancel(update, context):
+    user = update.message.from_user
+    # logger.info("User %s canceled the conversation.", user.first_name)
+    update.message.reply_text('Bye! I hope we can talk again some day.',
+                              reply_markup=ReplyKeyboardRemove())
+
+    return ConversationHandler.END
+
+
+def get_mc(update, context):  # Get the micro content json
+    contents = requests.get('http://178.79.170.232:8000/json?content=1').json()
+    reply_keyboard = ['A', 'B', 'C']
+
     title = contents['title']
     author = contents['meta_data']['author']
     explanation = contents['text'][0]
-
-    chat_id = update.message.chat_id
+    # chat_id = update.message.chat_id
     markup = telegram.ReplyKeyboardRemove(selective=False)  # To remove the keyboard buttons from the previous interaction
-    bot.send_message(chat_id, "Hi! You are going to start the micro content! ", reply_markup=markup)
-    bot.send_message(chat_id=chat_id, text="Micro content: "+title)
-    # bot.send_video(chat_id=chat_id, video="http://178.79.170.232:8000/micro_content_manager/static/videos/RecordRTC-2019914-6v15d09xs1f.webm")
+    # bot.send_message(chat_id, "Hi! You are going to start the micro content! ", reply_markup=markup)
+    chat_id = update.message.chat_id
 
+    update.message.reply_text("Hi! You are going to start the micro content! ")
+    update.message.reply_text("Micro content: "+title)
+    update.message.reply_text(explanation)
+    update.message.reply_text("Author: "+author)
+    update.message.reply_text("Loading video...")
 
-    bot.send_message(chat_id=chat_id, text=explanation)
-    bot.send_message(chat_id=chat_id, text="Author: "+author)
     video = open('/home/inao/Trabajo/ElemendBot/media/videos/microlearning.mp4', 'rb')
-    bot.send_video(chat_id, video)
-    build_quiz(contents, bot, update, chat_id)
+    update.message.reply_video(video)
+
+    update.message.reply_text(
+        "Question "+str(1) + ": " + contents['quiz'][0]['question'],
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+
+    return Q2
 
 
 def main():
-    updater = Updater('729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0')
+    updater = Updater('729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0', use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('pic', pic))
-    dp.add_handler(CommandHandler('mc', get_mc))
+    contents = requests.get('http://178.79.170.232:8000/json?content=1').json()
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('mc', get_mc)],
+
+        states={
+            Q2: [MessageHandler(Filters.text, q2)],
+
+            Q3: [MessageHandler(Filters.text, q3)],
+
+            END_QUIZ: [MessageHandler(Filters.text, end_quiz)],
+
+
+        },
+
+        fallbacks=[CommandHandler('cancel', cancel)]
+    )
+
+    dp.add_handler(conv_handler)
+
+    # dp.add_error_handler(error)
+
+
     updater.start_polling()
     updater.idle()
 

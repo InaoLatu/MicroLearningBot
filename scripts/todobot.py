@@ -2,7 +2,7 @@ import json
 import requests
 import time
 import urllib
-from dbhelper import DBHelper
+from scripts.dbhelper import DBHelper
 db = DBHelper()
 
 TOKEN = "729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0"
