@@ -3,10 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="0ff22070-029c-4833-a418-80340215264c" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/../AT/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ElemendBot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ElemendBot.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/pip-selfcheck.json" beforeDir="false" afterPath="$PROJECT_DIR$/venv/pip-selfcheck.json" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,7 +17,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/ElemendBot$python_main.coverage" NAME="main Coverage Results" MODIFIED="1570690737872" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/ElemendBot$main.coverage" NAME="main Coverage Results" MODIFIED="1573152062692" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ElemendBot$main.coverage" NAME="main Coverage Results" MODIFIED="1574165878038" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -35,39 +38,8 @@
     </expand>
     <select />
   </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="27" column="53" selection-start-line="27" selection-start-column="53" selection-end-line="27" selection-end-column="53" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utils.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/conversation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="142" column="13" selection-start-line="142" selection-start-column="13" selection-end-line="142" selection-end-column="13" />
-              <folding>
-                <element signature="e#538#552#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+  <component name="FavoritesManager">
+    <favorites_list name="ElemendBot" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -95,66 +67,36 @@
       <find>get_url</find>
       <find>send_message</find>
       <find>get_last_update_id</find>
+      <find>RESULTS</find>
+      <find>mc</find>
+      <find>micro_content</find>
+      <find>get_micro_content</find>
+      <find>results</find>
     </findStrings>
     <replaceStrings>
       <replace>URL_AT</replace>
+      <replace>micro_content</replace>
+      <replace>get_micro_content</replace>
+      <replace>all_answers</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="UPDATE_TYPE" value="MERGE" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/echobot.py" />
-        <option value="$PROJECT_DIR$/dbhelper.py" />
-        <option value="$PROJECT_DIR$/todobot.py" />
-        <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/scripts/conversation.py" />
-        <option value="$PROJECT_DIR$/scripts/utils.py" />
-        <option value="$PROJECT_DIR$/utils.py" />
-        <option value="$PROJECT_DIR$/main.py" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1977" />
-    <option name="y" value="-4" />
-    <option name="width" value="1863" />
-    <option name="height" value="1084" />
-  </component>
+  <component name="ProjectId" id="1WTUh7TgekZcBN6KTbQMKhuYNVi" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="ElemendBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ElemendBot" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ElemendBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ElemendBot" type="462c0819:PsiDirectoryNode" />
-              <item name="scripts" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Rebeca" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -164,18 +106,6 @@
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/scripts" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
@@ -200,6 +130,18 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -239,7 +181,21 @@
       <workItem from="1572869910345" duration="3395000" />
       <workItem from="1572947938967" duration="7148000" />
       <workItem from="1573063899263" duration="255000" />
-      <workItem from="1573146817531" duration="4991000" />
+      <workItem from="1573146817531" duration="15899000" />
+      <workItem from="1573460589795" duration="4151000" />
+      <workItem from="1573470615717" duration="3723000" />
+      <workItem from="1573561232421" duration="2030000" />
+      <workItem from="1573595164307" duration="131000" />
+      <workItem from="1573635642038" duration="1389000" />
+      <workItem from="1573657305632" duration="5000" />
+      <workItem from="1573724605063" duration="11604000" />
+      <workItem from="1573754955150" duration="601000" />
+      <workItem from="1573909374934" duration="92000" />
+      <workItem from="1574067645572" duration="5548000" />
+      <workItem from="1574098393875" duration="813000" />
+      <workItem from="1574153227228" duration="13876000" />
+      <workItem from="1578475773053" duration="1686000" />
+      <workItem from="1579522965682" duration="1495000" />
     </task>
     <task id="LOCAL-00001" summary="Managing of JSON data and quiz done.">
       <created>1570691492119</created>
@@ -304,11 +260,22 @@
       <option name="project" value="LOCAL" />
       <updated>1572874911517</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Updates: &#10;- Results grouped by question.&#10;- Initial message. &#10;- Back button.">
+      <created>1573152275331</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1573152275331</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Choice between wrong, correct, all and none answers results.">
+      <created>1573217180767</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1573217180767</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
-  </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="132367000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -318,55 +285,6 @@
       <are-packages-shown value="true" />
       <is-autoscroll-to-source value="true" />
     </todo-panel>
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="1977" y="-4" width="1863" height="1084" extended-state="6" />
-    <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18547055" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3291536" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6285085" visible="true" weight="0.27168235" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49972484" weight="0.3291536" />
-      <window_info anchor="bottom" id="Docker" order="7" sideWeight="0.49972484" weight="0.3291536" />
-      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.7682994" weight="0.31138977" />
-      <window_info anchor="bottom" id="Database Changes" order="9" sideWeight="0.49972484" weight="0.3291536" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.37149146" side_tool="true" weight="0.24869384" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49917448" weight="0.43155694" />
-      <window_info anchor="bottom" id="Python Console" order="12" weight="0.3291536" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="right" id="Database" order="4" weight="0.3296643" />
-    </layout>
-    <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16895983" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3291536" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.84975237" visible="true" weight="0.15285254" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49972484" weight="0.3291536" />
-      <window_info anchor="bottom" id="Docker" order="7" sideWeight="0.49972484" weight="0.3291536" />
-      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.7682994" weight="0.31138977" />
-      <window_info anchor="bottom" id="Database Changes" order="9" sideWeight="0.49972484" weight="0.3291536" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5008255" side_tool="true" weight="0.21943574" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49917448" weight="0.40904197" />
-      <window_info anchor="bottom" id="Python Console" order="12" weight="0.3291536" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="right" id="Database" order="4" weight="0.3296643" />
-    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -382,68 +300,41 @@
     <MESSAGE value="Micro content results after completion." />
     <MESSAGE value="Menu divided in Units of micro content." />
     <MESSAGE value="Updates: &#10;- Results grouped by question.&#10;- Initial message. &#10;- Back button." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updates: &#10;- Results grouped by question.&#10;- Initial message. &#10;- Back button." />
+    <MESSAGE value="Choice between wrong, correct, all and none answers results." />
+    <option name="LAST_COMMIT_MESSAGE" value="Choice between wrong, correct, all and none answers results." />
   </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/scripts/test.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/dbhelper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/todobot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="75" column="39" selection-start-line="75" selection-start-column="39" selection-end-line="75" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/echobot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="47" column="10" selection-start-line="47" selection-start-column="10" selection-end-line="47" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/emoji/emoji/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/emoji/emoji/core.py" />
-    <entry file="file://$PROJECT_DIR$/emoji/setup.py" />
-    <entry file="file://$PROJECT_DIR$/user_photo.jpg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/conversation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="142" column="13" selection-start-line="142" selection-start-column="13" selection-end-line="142" selection-end-column="13" />
-          <folding>
-            <element signature="e#538#552#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="27" column="53" selection-start-line="27" selection-start-column="53" selection-end-line="27" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
+  <component name="WindowStateProjectService">
+    <state x="453" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1579523692969">
+      <screen x="57" y="24" width="3783" height="1056" />
+    </state>
+    <state x="453" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog/57.24.3783.1056@57.24.3783.1056" timestamp="1579523692969" />
+    <state width="1817" height="250" key="GridCell.Tab.0.bottom" timestamp="1579523870577">
+      <screen x="57" y="24" width="3783" height="1056" />
+    </state>
+    <state width="1840" height="250" key="GridCell.Tab.0.bottom/57.24.1863.1056/1920.0.1920.1080@57.24.1863.1056" timestamp="1579256535648" />
+    <state width="1817" height="250" key="GridCell.Tab.0.bottom/57.24.3783.1056@57.24.3783.1056" timestamp="1579523870577" />
+    <state width="1817" height="250" key="GridCell.Tab.0.center" timestamp="1579523870574">
+      <screen x="57" y="24" width="3783" height="1056" />
+    </state>
+    <state width="1840" height="250" key="GridCell.Tab.0.center/57.24.1863.1056/1920.0.1920.1080@57.24.1863.1056" timestamp="1579256535648" />
+    <state width="1817" height="250" key="GridCell.Tab.0.center/57.24.3783.1056@57.24.3783.1056" timestamp="1579523870574" />
+    <state width="1817" height="250" key="GridCell.Tab.0.left" timestamp="1579523870572">
+      <screen x="57" y="24" width="3783" height="1056" />
+    </state>
+    <state width="1840" height="250" key="GridCell.Tab.0.left/57.24.1863.1056/1920.0.1920.1080@57.24.1863.1056" timestamp="1579256535648" />
+    <state width="1817" height="250" key="GridCell.Tab.0.left/57.24.3783.1056@57.24.3783.1056" timestamp="1579523870572" />
+    <state width="1817" height="250" key="GridCell.Tab.0.right" timestamp="1579523870576">
+      <screen x="57" y="24" width="3783" height="1056" />
+    </state>
+    <state width="1840" height="250" key="GridCell.Tab.0.right/57.24.1863.1056/1920.0.1920.1080@57.24.1863.1056" timestamp="1579256535648" />
+    <state width="1817" height="250" key="GridCell.Tab.0.right/57.24.3783.1056@57.24.3783.1056" timestamp="1579523870576" />
+    <state x="908" y="174" key="SettingsEditor" timestamp="1579523285823">
+      <screen x="57" y="24" width="3783" height="1056" />
+    </state>
+    <state x="482" y="174" key="SettingsEditor/57.24.1863.1056/1920.0.1920.1080@57.24.1863.1056" timestamp="1579173679891" />
+    <state x="908" y="174" key="SettingsEditor/57.24.3783.1056@57.24.3783.1056" timestamp="1579523285823" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ElemendBot$main.coverage" NAME="main Coverage Results" MODIFIED="1579523870550" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
