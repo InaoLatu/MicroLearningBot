@@ -7,16 +7,13 @@ import logging
 from time import sleep
 
 import telegram
-from telegram import Message, ReplyKeyboardRemove, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, InlineQueryHandler, CommandHandler, ConversationHandler, MessageHandler, Filters, \
+from telegram import ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters, \
     CallbackQueryHandler
 import requests
 import json
 import utils
 
-from moviepy.editor import VideoFileClip
-
-# URL_AT = "http://castor.det.uvigo.es:9000/json?content=1"
 
 TOKEN = "729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0"  # Obtained from BotFather in Telegram app
 URL_bot = "https://api.telegram.org/bot{}/".format(TOKEN)
@@ -27,14 +24,52 @@ logger = logging.getLogger(__name__)
 
 MENU1, MENU2, START_QUIZ, Q2, Q3, END_QUIZ, RESULTS, RESULTS2 = range(8)  # Stages of the quiz
 
-micro_content = requests.get('http://castor.det.uvigo.es:9000/json?content=1').json()
-
+micro_content = []
 selections = []
 solutions = []
 
 updater = Updater('729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0', use_context=True)
 dp = updater.dispatcher
-job_queue = updater.job_queue
+
+
+def start(update, context):
+    update.message.reply_text("Welcome to Elemend micro learning bot! \n"
+                              "You have the following commands available:\n\n"
+                              "/help - Show the commands available.\n"
+                              "/menu - Show you the available Units.\n"
+                              "/cancel - Cancel the conversation whenever you want.")
+
+
+def help(update, context):
+    update.message.reply_text("You have the following commands available:\n\n"
+                              "/help - Show the commands available.\n"
+                              "/menu - Show you the available Units.\n"
+                              "/cancel - Cancel the conversation.")
+
+
+def cancel(update, context):
+    user = update.message.from_user
+    logger.info("User %s canceled the conversation.", user.first_name)
+    update.message.reply_text('Bye! I hope we can talk again some day.',
+                              reply_markup=ReplyKeyboardRemove())
+
+    return ConversationHandler.END
+
+
+# Initial declaration of the conversation handler
+conv_handler = ConversationHandler(
+    entry_points=[CommandHandler('start', start)],
+
+    states={
+
+        MENU1: [],
+
+        MENU2: []
+
+    },
+
+    fallbacks=[CommandHandler('cancel', cancel), CommandHandler('help', help)]
+)
 
 
 def build_keyboard(items):
@@ -48,14 +83,17 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
-def q2(update, context):
+def q2(update, context):  # Shows the second question of the quiz and returns to the third question state
     user = update.message.from_user  # User who has answered
     logger.info("Answer for Question 1 of %s: %s", user.first_name, update.message.text)
     selections.append(update.message.text)
-    reply_keyboard = ['A', 'B', 'C']
+
+    choices = micro_content['quiz'][1]['choices']
+    reply_keyboard = build_keyboard([choices[0]['choice_text'], choices[1]['choice_text'], choices[2]['choice_text']])
+
     update.message.reply_text(
         "Question " + str(2) + ": " + micro_content['quiz'][1]['question'],
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+        reply_markup=reply_keyboard)
     return Q3
 
 
@@ -63,10 +101,13 @@ def q3(update, context):
     user = update.message.from_user  # User who has answered
     logger.info("Answer for Question 2 of %s: %s", user.first_name, update.message.text)
     selections.append(update.message.text)
-    reply_keyboard = ['A', 'B', 'C']
+
+    choices = micro_content['quiz'][2]['choices']
+    reply_keyboard = build_keyboard([choices[0]['choice_text'], choices[1]['choice_text'], choices[2]['choice_text']])
+
     update.message.reply_text(
         "Question " + str(3) + ": " + micro_content['quiz'][2]['question'],
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+        reply_markup=reply_keyboard)
     return END_QUIZ
 
 
@@ -82,6 +123,8 @@ def end_quiz(update, context):
     correct_answers = []
     wrong_answers = []
 
+    # Create the blocks of strings related to correct, wrong or all answers. These blocks will be displayed depending of
+    # the selection of the user in this state. Each block include one question with the selection and the correct answer.
     for q in micro_content['quiz']:
         block = ""
         question = "*Question " + str(index) + "*: " + micro_content['quiz'][index]['question'] + "\n"
@@ -123,8 +166,6 @@ def end_quiz(update, context):
                               parse_mode=telegram.ParseMode.MARKDOWN,
                               reply_markup=reply_markup)
 
-
-
     return RESULTS
 
 
@@ -146,7 +187,7 @@ def show_wrong_answers(update, context):
             text=r,
             parse_mode=telegram.ParseMode.MARKDOWN,
         )
-        sleep(4)
+        sleep(4)  # To give the user time to read the text one at a time
 
     bot.delete_message(chat_id=query.message.chat_id, message_id=query.message.message_id)
 
@@ -179,7 +220,7 @@ def show_correct_answers(update, context):
             text=r,
             parse_mode=telegram.ParseMode.MARKDOWN,
         )
-        sleep(4)
+        sleep(4)  # To give the user time to read the text one at a time
 
     bot.send_message(
         chat_id=query.message.chat_id,
@@ -210,7 +251,7 @@ def show_all_answers(update, context):
             text=r,
             parse_mode=telegram.ParseMode.MARKDOWN,
         )
-        sleep(4)
+        sleep(4)  # To give the user time to read the text one at a time
 
     bot.send_message(
         chat_id=query.message.chat_id,
@@ -223,41 +264,7 @@ def show_all_answers(update, context):
     return RESULTS
 
 
-def back_to_units(update, context):
-    bot = context.bot
-    query = update.callback_query
-
-    query = update.callback_query
-    bot = context.bot
-
-    button_list = [
-        InlineKeyboardButton("Unit 1", callback_data="unit1"),
-        InlineKeyboardButton("Unit 2", callback_data="unit2"),
-        InlineKeyboardButton("Unit 3", callback_data="unit3"),
-        InlineKeyboardButton("Unit 4", callback_data="unit4")
-    ]
-    reply_markup = InlineKeyboardMarkup(utils.build_menu(button_list, n_cols=2))
-
-    bot.send_message(
-        chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
-        text="Choose a Unit of micro content:",
-        reply_markup=reply_markup,
-    )
-
-    return MENU1
-
-
-def cancel(update, context):
-    user = update.message.from_user
-    logger.info("User %s canceled the conversation.", user.first_name)
-    update.message.reply_text('Bye! I hope we can talk again some day.',
-                              reply_markup=ReplyKeyboardRemove())
-
-    return ConversationHandler.END
-
-
-def get_micro_content(update, context):
+def get_micro_content(update, context):  # Gets the selected micro-content
     query = update.callback_query
     bot = context.bot
     chat_id = query.message.chat_id
@@ -267,22 +274,26 @@ def get_micro_content(update, context):
         text="Start the micro content!",
     )
 
+    match = context.match
+    micro_content_id = match.group(0)  # Id of the micro content selected in the display
+    context.user_data['mc_id'] = micro_content_id
+
+    global micro_content  # Edit the global value of micro_content so the rest of the functions see the same value
+    micro_content = requests.get('http://127.0.0.1:7000/microcontent?id=' + str(micro_content_id)).json()
+
     bot.send_message(chat_id,
                      text="Micro content: " + micro_content['title'] + "\n" + micro_content['text'][0] + "\nAuthor: " +
                           micro_content['meta_data']['author'])
-    sleep(5)
-    # clip = VideoFileClip('/home/inao/Trabajo/ElemendBot/media/videos/microlearning.mp4')
-    # bot.send_message(chat_id, text="Video duration: " + str(clip.duration) + " seconds")
+
 
     bot.send_message(chat_id, text="Loading video...")
     video = open('/home/inao/Trabajo/ElemendBot/media/videos/microlearning.mp4', 'rb')
 
     bot.send_video(chat_id, video)
-    sleep(15)
+    # sleep(15)
 
     button_list = [
         InlineKeyboardButton("Yes!", callback_data="yes"),
-        # InlineKeyboardButton("No, back to Units", callback_data="back")
     ]
     reply_markup = InlineKeyboardMarkup(utils.build_menu(button_list, n_cols=1))
 
@@ -291,24 +302,28 @@ def get_micro_content(update, context):
     return START_QUIZ
 
 
-def unit1(update, context):
+def get_unit_micro_contents(update, context):  # Get the micro-content included in the selected Unit
     query = update.callback_query
     bot = context.bot
+    match = context.match
 
-    button_list = [
-        InlineKeyboardButton("mc 1", callback_data="mc1"),
-        InlineKeyboardButton("mc 2", callback_data="mc2"),
-        InlineKeyboardButton("mc 3", callback_data="mc3"),
-        InlineKeyboardButton("mc 4", callback_data="mc4"),
-        InlineKeyboardButton("Back to Units", callback_data="back")
-    ]
+    unit = match.group(0)  # Unit selected in the display
+    micro_content_list = requests.get("http://127.0.0.1:7000/units/" + str(unit)).json()
+
+    button_list = []
+    for mc in micro_content_list:
+        button_list += [InlineKeyboardButton(mc['title'], callback_data=str(mc['id']))]
+        conv_handler.states[MENU2].append(
+            CallbackQueryHandler(get_micro_content, pattern='^' + str(mc['id']) + '$'))  # Update states
+
+    button_list += [InlineKeyboardButton("Back to Units", callback_data="back")]
+
     reply_markup = InlineKeyboardMarkup(utils.build_menu(button_list, n_cols=2))
 
     bot.edit_message_text(
         chat_id=query.message.chat_id,
         message_id=query.message.message_id,
-        text="*UNIT 1* \n"
-             "Choose a micro content:",
+        text="*" + unit.capitalize() + "* \n" + "Choose a micro content: \n",
         parse_mode=telegram.ParseMode.MARKDOWN,
         reply_markup=reply_markup
     )
@@ -318,117 +333,48 @@ def unit1(update, context):
     return MENU2
 
 
-def unit2(update, context):
-    query = update.callback_query
-    bot = context.bot
-    button_list = [
-        InlineKeyboardButton("mc 1", callback_data="mc1"),
-        InlineKeyboardButton("mc 2", callback_data="mc2"),
-        InlineKeyboardButton("mc 3", callback_data="mc3"),
-        InlineKeyboardButton("mc 4", callback_data="mc4"),
-        InlineKeyboardButton("Back to Units", callback_data="back")
-    ]
-    reply_markup = InlineKeyboardMarkup(utils.build_menu(button_list, n_cols=2))
-
-    bot.edit_message_text(
-        chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
-        text="*UNIT 2* \n"
-             "Choose a micro content:",
-        parse_mode=telegram.ParseMode.MARKDOWN,
-        reply_markup=reply_markup
-    )
-
-    return MENU2
-
-
-def unit3(update, context):
-    query = update.callback_query
-    bot = context.bot
-
-    button_list = [
-        InlineKeyboardButton("mc 1", callback_data="mc1"),
-        InlineKeyboardButton("mc 2", callback_data="mc2"),
-        InlineKeyboardButton("mc 3", callback_data="mc3"),
-        InlineKeyboardButton("mc 4", callback_data="mc4"),
-        InlineKeyboardButton("Back to Units", callback_data="back")
-    ]
-    reply_markup = InlineKeyboardMarkup(utils.build_menu(button_list, n_cols=2))
-
-    bot.edit_message_text(
-        chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
-        text="*UNIT 3* \n"
-             "Choose a micro content:",
-        parse_mode=telegram.ParseMode.MARKDOWN,
-        reply_markup=reply_markup
-    )
-
-    return MENU2
-
-
-def unit4(update, context):
-    query = update.callback_query
-    bot = context.bot
-
-    button_list = [
-        InlineKeyboardButton("mc 1", callback_data="mc1"),
-        InlineKeyboardButton("mc 2", callback_data="mc2"),
-        InlineKeyboardButton("mc 3", callback_data="mc3"),
-        InlineKeyboardButton("mc 4", callback_data="mc4"),
-        InlineKeyboardButton("Back to Units", callback_data="back")
-    ]
-    reply_markup = InlineKeyboardMarkup(utils.build_menu(button_list, n_cols=2))
-
-    bot.edit_message_text(
-        chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
-        text="*UNIT 4* \n"
-             "Choose a micro content:",
-        parse_mode=telegram.ParseMode.MARKDOWN,
-        reply_markup=reply_markup
-    )
-
-    return MENU2
-
-
-def start_quiz(update, context):
+def start_quiz(update, context):  # Shows the first question of the quiz and returns to the second question state
     query = update.callback_query
     bot = context.bot
     chat_id = query.message.chat_id
 
-    reply_keyboard = build_keyboard(['A', 'B', 'C'])
+    choices = micro_content['quiz'][0]['choices']
+    reply_keyboard = build_keyboard([choices[0]['choice_text'], choices[1]['choice_text'], choices[2]['choice_text']])
     bot.send_message(chat_id, text="Question " + str(1) + ": " + micro_content['quiz'][0]['question'],
                      reply_markup=reply_keyboard)
 
     return Q2
 
 
-def menu1(update, context):
-    button_list = [
-        InlineKeyboardButton("Unit 1", callback_data="unit1"),
-        InlineKeyboardButton("Unit 2", callback_data="unit2"),
-        InlineKeyboardButton("Unit 3", callback_data="unit3"),
-        InlineKeyboardButton("Unit 4", callback_data="unit4")
-    ]
+def get_units(update, context):
+    units = requests.get('http://127.0.0.1:7000/units').json()  # Call Authoring Tool API to get the Units available
+    button_list = []
+    conv_handler.states[MENU1] = []  # Clean previous states
+
+    for u in units:
+        button_list += [InlineKeyboardButton(u['name'], callback_data=u['name'])]
+        conv_handler.states[MENU1].append(CallbackQueryHandler(get_unit_micro_contents, pattern='^' + u['name'] + '$'))  # Update states
+
     reply_markup = InlineKeyboardMarkup(utils.build_menu(button_list, n_cols=2))
     update.message.reply_text("Choose a Unit of micro content: ", reply_markup=reply_markup)
     return MENU1
 
 
-def menu1_back(update, context):
+def back_to_units(update, context):
     query = update.callback_query
     bot = context.bot
 
-    button_list = [
-        InlineKeyboardButton("Unit 1", callback_data="unit1"),
-        InlineKeyboardButton("Unit 2", callback_data="unit2"),
-        InlineKeyboardButton("Unit 3", callback_data="unit3"),
-        InlineKeyboardButton("Unit 4", callback_data="unit4")
-    ]
+    units = requests.get('http://127.0.0.1:7000/units').json()  # Call Authoring Tool API to get the Units available
+    button_list = []
+    conv_handler.states[MENU1] = []  # Clean previous states
+
+    for u in units:
+        button_list += [InlineKeyboardButton(u['name'], callback_data=u['name'])]
+        conv_handler.states[MENU1].append(CallbackQueryHandler(get_unit_micro_contents, pattern='^' + u['name'] + '$'))  # Update states
+
     reply_markup = InlineKeyboardMarkup(utils.build_menu(button_list, n_cols=2))
 
-    bot.edit_message_text(
+    bot.send_message(
         chat_id=query.message.chat_id,
         message_id=query.message.message_id,
         text="Choose a Unit of micro content",
@@ -438,62 +384,30 @@ def menu1_back(update, context):
     return MENU1
 
 
-def start(update, context):
-    update.message.reply_text("Welcome to Elemend micro learning bot! \n"
-                              "You have the following commands available:\n\n"
-                              "/help - Show the commands available.\n"
-                              "/menu - Show you the available Units.\n"
-                              "/cancel - Cancel the conversation whenever you want.")
-
-
-def help(update, context):
-    update.message.reply_text("You have the following commands available:\n\n"
-                              "/help - Show the commands available.\n"
-                              "/menu - Show you the available Units.\n"
-                              "/cancel - Cancel the conversation.")
+def init_conv_handler():
+    # Add entry points
+    conv_handler.entry_points.append(CommandHandler('menu', get_units))
+    # Add fallbacks
+    conv_handler.fallbacks.append(CommandHandler('menu', get_units))
+    # Add states
+    conv_handler.states[MENU2] = [CallbackQueryHandler(back_to_units, pattern='^back$')]
+    conv_handler.states[START_QUIZ] = [CallbackQueryHandler(start_quiz, pattern='^yes$'),
+                                       CallbackQueryHandler(back_to_units, pattern='^back$')]
+    conv_handler.states[Q2] = [MessageHandler(Filters.text, q2)]
+    conv_handler.states[Q3] = [MessageHandler(Filters.text, q3)]
+    conv_handler.states[END_QUIZ] = [MessageHandler(Filters.text, end_quiz)]
+    conv_handler.states[RESULTS] = [CallbackQueryHandler(show_wrong_answers, pattern='^wrong$'),
+                                    CallbackQueryHandler(show_correct_answers, pattern='^correct$'),
+                                    CallbackQueryHandler(show_all_answers, pattern='^all$'),
+                                    CallbackQueryHandler(back_to_units, pattern='^back$')]
 
 
 def main():
-    updater = Updater('729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0', use_context=True)
-    dp = updater.dispatcher
-
-    conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('menu', menu1), CommandHandler('start', start)],
-
-        states={
-
-            MENU1: [CallbackQueryHandler(unit1, pattern='^unit1$'),
-                    CallbackQueryHandler(unit2, pattern='^unit2$'),
-                    CallbackQueryHandler(unit3, pattern='^unit3$'),
-                    CallbackQueryHandler(unit4, pattern='^unit4$')],
-            MENU2: [CallbackQueryHandler(get_micro_content, pattern='^mc1$'),
-                    CallbackQueryHandler(get_micro_content, pattern='^mc2$'),
-                    CallbackQueryHandler(get_micro_content, pattern='^mc3$'),
-                    CallbackQueryHandler(get_micro_content, pattern='^mc4$'),
-                    CallbackQueryHandler(menu1_back, pattern='^back$')],
-
-            START_QUIZ: [CallbackQueryHandler(start_quiz, pattern='^yes$'),
-                         CallbackQueryHandler(menu1_back, pattern='^back$')],
-
-            Q2: [MessageHandler(Filters.text, q2)],  # Receives in the filter the answer for Q1
-
-            Q3: [MessageHandler(Filters.text, q3)],
-
-            END_QUIZ: [MessageHandler(Filters.text, end_quiz)],
-
-            RESULTS: [CallbackQueryHandler(show_wrong_answers, pattern='^wrong$'),
-                      CallbackQueryHandler(show_correct_answers, pattern='^correct$'),
-                      CallbackQueryHandler(show_all_answers, pattern='^all$'),
-                      CallbackQueryHandler(back_to_units, pattern='^back$')],
-
-        },
-
-        fallbacks=[CommandHandler('cancel', cancel), CommandHandler('help', help), CommandHandler('menu', menu1)]
-    )
+    init_conv_handler()
     dp.add_handler(conv_handler)
     dp.add_handler(CommandHandler('help', help))
 
-    updater.start_polling()
+    updater.start_polling()  # Starts the bot
     updater.idle()
 
 
