@@ -14,30 +14,36 @@ import requests
 import json
 import utils
 
-
-TOKEN = "729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0"  # Obtained from BotFather in Telegram app
-URL_bot = "https://api.telegram.org/bot{}/".format(TOKEN)
+BOT_TOKEN = "729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0"  # Obtained from BotFather in Telegram app
+URL_bot = "https://api.telegram.org/bot{}/".format(BOT_TOKEN)
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-MENU1, MENU2, START_QUIZ, Q2, Q3, END_QUIZ, RESULTS, RESULTS2 = range(8)  # Stages of the quiz
+AUTH, MENU1, MENU2, START_QUIZ, Q2, Q3, END_QUIZ, RESULTS, RESULTS2 = range(9)  # Stages of the quiz
 
 micro_content = []
 selections = []
 solutions = []
 
-updater = Updater('729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0', use_context=True)
+updater = Updater(BOT_TOKEN, use_context=True)
 dp = updater.dispatcher
+id_telegram_user = ""
+auth_username = ""  # Username previously registered in the Auth Server
 
 
 def start(update, context):
-    update.message.reply_text("Welcome to Elemend micro learning bot! \n"
-                              "You have the following commands available:\n\n"
-                              "/help - Show the commands available.\n"
-                              "/menu - Show you the available Units.\n"
-                              "/cancel - Cancel the conversation whenever you want.")
+    # update.message.reply_text("Welcome to Elemend micro learning bot! \n"
+    #                           "You have the following commands available:\n\n"
+    #                           "/help - Show the commands available.\n"
+    #                           "/menu - Show you the available Units.\n"
+    #                           "/cancel - Cancel the conversation whenever you want.")
+
+    global id_telegram_user
+    id_telegram_user = update.effective_user.id
+
+    update.message.reply_text("Please introduce the following command to authenticate: /auth")
 
 
 def help(update, context):
@@ -285,7 +291,6 @@ def get_micro_content(update, context):  # Gets the selected micro-content
                      text="Micro content: " + micro_content['title'] + "\n" + micro_content['text'][0] + "\nAuthor: " +
                           micro_content['meta_data']['author'])
 
-
     bot.send_message(chat_id, text="Loading video...")
     video = open('/home/inao/Trabajo/ElemendBot/media/videos/microlearning.mp4', 'rb')
 
@@ -347,16 +352,26 @@ def start_quiz(update, context):  # Shows the first question of the quiz and ret
 
 
 def get_units(update, context):
-    units = requests.get('http://127.0.0.1:7000/units').json()  # Call Authoring Tool API to get the Units available
-    button_list = []
-    conv_handler.states[MENU1] = []  # Clean previous states
+    # First, check if the user has been authenticated, only if is authenticated the user can access to the units
+    req_string = "http://127.0.0.1:8000/students/check_user/telegram/" + str(update.effective_user.id)
+    re = requests.get(req_string)
+    if re.status_code == 404:
+        update.message.reply_text("Your must authenticate yourself first")
+        # authenticate(update, context)
+        update.message.reply_text("Introduce your username: ")
+        return AUTH
+    else:
+        units = requests.get('http://127.0.0.1:7000/units').json()  # Call Authoring Tool API to get the Units available
+        button_list = []
+        conv_handler.states[MENU1] = []  # Clean previous states
 
-    for u in units:
-        button_list += [InlineKeyboardButton(u['name'], callback_data=u['name'])]
-        conv_handler.states[MENU1].append(CallbackQueryHandler(get_unit_micro_contents, pattern='^' + u['name'] + '$'))  # Update states
+        for u in units:
+            button_list += [InlineKeyboardButton(u['name'], callback_data=u['name'])]
+            conv_handler.states[MENU1].append(
+                CallbackQueryHandler(get_unit_micro_contents, pattern='^' + u['name'] + '$'))  # Update states
 
-    reply_markup = InlineKeyboardMarkup(utils.build_menu(button_list, n_cols=2))
-    update.message.reply_text("Choose a Unit of micro content: ", reply_markup=reply_markup)
+        reply_markup = InlineKeyboardMarkup(utils.build_menu(button_list, n_cols=2))
+        update.message.reply_text("Choose a Unit of micro content: ", reply_markup=reply_markup)
     return MENU1
 
 
@@ -370,7 +385,8 @@ def back_to_units(update, context):
 
     for u in units:
         button_list += [InlineKeyboardButton(u['name'], callback_data=u['name'])]
-        conv_handler.states[MENU1].append(CallbackQueryHandler(get_unit_micro_contents, pattern='^' + u['name'] + '$'))  # Update states
+        conv_handler.states[MENU1].append(
+            CallbackQueryHandler(get_unit_micro_contents, pattern='^' + u['name'] + '$'))  # Update states
 
     reply_markup = InlineKeyboardMarkup(utils.build_menu(button_list, n_cols=2))
 
@@ -384,12 +400,45 @@ def back_to_units(update, context):
     return MENU1
 
 
+def authenticate(update, context):
+    try:
+        if not context.user_data['auth_check']:
+            update.message.reply_text("The username introduced does not exist")
+    except KeyError as e:
+        pass
+    update.message.reply_text("Introduce your username: ")
+    return AUTH
+
+# Check if there is a User with the given username and it assigns the update.effective_user.id to the telegram_id field in the Auth Server
+def check_credentials(update, context):
+    username = update.message.text
+    request_string = "http://127.0.0.1:8000/students/identification/" + username + "/" + "telegram" + "/" + str(update.effective_user.id)
+    re = requests.get(request_string)
+    if re.status_code == 200:
+        context.user_data['auth_check'] = True
+        update.message.reply_text("You successfully completed the authentication!")
+        update.message.reply_text("Welcome to Elemend micro learning bot! \n"
+                                  "You have the following commands available:\n\n"
+                                  "/help - Show the commands available.\n"
+                                  "/menu - Show you the available Units.\n"
+                                  "/cancel - Cancel the conversation whenever you want.")
+    else:
+        context.user_data['auth_check'] = False
+        authenticate(update, context)
+
+
+
+
+
+# Initialize the conversation handler with the necessary states
 def init_conv_handler():
     # Add entry points
     conv_handler.entry_points.append(CommandHandler('menu', get_units))
+    conv_handler.entry_points.append(CommandHandler('auth', authenticate))
     # Add fallbacks
     conv_handler.fallbacks.append(CommandHandler('menu', get_units))
     # Add states
+    conv_handler.states[AUTH] = [MessageHandler(Filters.text, check_credentials)]
     conv_handler.states[MENU2] = [CallbackQueryHandler(back_to_units, pattern='^back$')]
     conv_handler.states[START_QUIZ] = [CallbackQueryHandler(start_quiz, pattern='^yes$'),
                                        CallbackQueryHandler(back_to_units, pattern='^back$')]
