@@ -32,6 +32,9 @@ dp = updater.dispatcher
 id_telegram_user = ""
 auth_username = ""  # Username previously registered in the Auth Server
 
+# General Manager API where all the request of the Bot are directed to
+GENERAL_MANAGER_IP = "http://127.0.0.1:8500/general_manager/"
+
 
 def start(update, context):
     # update.message.reply_text("Welcome to Elemend micro learning bot! \n"
@@ -153,6 +156,16 @@ def end_quiz(update, context):
         index = index + 1
         all_answers.append(block)
 
+    request_string = GENERAL_MANAGER_IP + "store_mark"
+    print(request_string)
+    data = {
+        'student_id': str(update.effective_user.id),
+        'unit_name': str(context.user_data["current_unit"]),
+        'microcontent_id': str(context.user_data["mc_id"]),
+        'mark': str((correct/len(micro_content['quiz']))*100),
+    }
+    print(data)
+    requests.post(request_string, data=data)
     update.message.reply_text("CONGRATS! You have completed the micro content!")
     update.message.reply_text("YOUR FINAL RESULT: " + str(correct) + "/" + str(len(micro_content['quiz'])))
     selections.clear()
@@ -285,7 +298,7 @@ def get_micro_content(update, context):  # Gets the selected micro-content
     context.user_data['mc_id'] = micro_content_id
 
     global micro_content  # Edit the global value of micro_content so the rest of the functions see the same value
-    micro_content = requests.get('http://127.0.0.1:7000/microcontent?id=' + str(micro_content_id)).json()
+    micro_content = requests.get(GENERAL_MANAGER_IP + 'microcontent?id=' + str(micro_content_id)).json()
 
     bot.send_message(chat_id,
                      text="Micro content: " + micro_content['title'] + "\n" + micro_content['text'][0] + "\nAuthor: " +
@@ -311,13 +324,17 @@ def get_unit_micro_contents(update, context):  # Get the micro-content included 
     query = update.callback_query
     bot = context.bot
     match = context.match
-
     unit = match.group(0)  # Unit selected in the display
-    micro_content_list = requests.get("http://127.0.0.1:7000/units/" + str(unit)).json()
+    context.user_data["current_unit"] = str(unit)
+    request_string = GENERAL_MANAGER_IP + "units/" + str(unit) + "/" + str(update.effective_user.id)
+    micro_content_list = requests.get(request_string).json()
 
     button_list = []
     for mc in micro_content_list:
-        button_list += [InlineKeyboardButton(mc['title'], callback_data=str(mc['id']))]
+        if mc['completed']:
+            button_list += [InlineKeyboardButton(mc['title']+" - completed", callback_data=str(mc['id']))]
+        else:
+            button_list += [InlineKeyboardButton(mc['title'], callback_data=str(mc['id']))]
         conv_handler.states[MENU2].append(
             CallbackQueryHandler(get_micro_content, pattern='^' + str(mc['id']) + '$'))  # Update states
 
@@ -352,16 +369,17 @@ def start_quiz(update, context):  # Shows the first question of the quiz and ret
 
 
 def get_units(update, context):
-    # First, check if the user has been authenticated, only if is authenticated the user can access to the units
-    req_string = "http://127.0.0.1:8000/students/check_user/telegram/" + str(update.effective_user.id)
+    # First, check if the user has been authenticated, only if he is authenticated the user can access to the units
+    req_string = GENERAL_MANAGER_IP + "check_user/telegram/" + str(update.effective_user.id)
     re = requests.get(req_string)
     if re.status_code == 404:
-        update.message.reply_text("Your must authenticate yourself first")
+        update.message.reply_text("Your must identify yourself first")
         # authenticate(update, context)
         update.message.reply_text("Introduce your username: ")
         return AUTH
     else:
-        units = requests.get('http://127.0.0.1:7000/units').json()  # Call Authoring Tool API to get the Units available
+        req_string = GENERAL_MANAGER_IP + "get_units/"
+        units = requests.get(req_string).json()  # Call Authoring Tool API to get the Units available
         button_list = []
         conv_handler.states[MENU1] = []  # Clean previous states
 
@@ -400,23 +418,23 @@ def back_to_units(update, context):
     return MENU1
 
 
-def authenticate(update, context):
+def authenticate(update, context, received_text):
     try:
-        if not context.user_data['auth_check']:
-            update.message.reply_text("The username introduced does not exist")
+        if not context.user_data['auth_check']:  # If the user data fails the authentication this message is shown
+            update.message.reply_text(received_text)
     except KeyError as e:
         pass
     update.message.reply_text("Introduce your username: ")
     return AUTH
 
-# Check if there is a User with the given username and it assigns the update.effective_user.id to the telegram_id field in the Auth Server
+# Check if there is a User with the given username and it assigns the update.effective_user.id value to the telegram_id field in the Auth Server that is accessed via General Manager
 def check_credentials(update, context):
     username = update.message.text
-    request_string = "http://127.0.0.1:8000/students/identification/" + username + "/" + "telegram" + "/" + str(update.effective_user.id)
+    request_string = GENERAL_MANAGER_IP + "identification_telegram/" + username + "/" + str(update.effective_user.id)
     re = requests.get(request_string)
     if re.status_code == 200:
         context.user_data['auth_check'] = True
-        update.message.reply_text("You successfully completed the authentication!")
+        update.message.reply_text("You successfully completed the identification!")
         update.message.reply_text("Welcome to Elemend micro learning bot! \n"
                                   "You have the following commands available:\n\n"
                                   "/help - Show the commands available.\n"
@@ -424,10 +442,7 @@ def check_credentials(update, context):
                                   "/cancel - Cancel the conversation whenever you want.")
     else:
         context.user_data['auth_check'] = False
-        authenticate(update, context)
-
-
-
+        authenticate(update, context, re.text)
 
 
 # Initialize the conversation handler with the necessary states
