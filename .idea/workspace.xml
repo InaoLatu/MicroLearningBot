@@ -13,7 +13,6 @@
       <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -204,7 +203,7 @@
       <workItem from="1591006185312" duration="4926000" />
       <workItem from="1591546331677" duration="5390000" />
       <workItem from="1591612987538" duration="3152000" />
-      <workItem from="1591699919568" duration="574000" />
+      <workItem from="1591699919568" duration="1300000" />
     </task>
     <task id="LOCAL-00001" summary="Managing of JSON data and quiz done.">
       <created>1570691492119</created>
@@ -304,7 +303,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585416268294</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="feat: all requests directed to the General Manager">
+      <created>1591737766874</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1591737766874</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -338,17 +344,18 @@
     <MESSAGE value="Before deployment in Castor server." />
     <MESSAGE value="feat: Get Units and Micro content from Authoring Tool REST API&#10;refactor: Delete the unused methods&#10;&#10;Now it gets the Units from the Authoring Tool each time the command /menu is introduced. Also, it gets the micro-content within a Unit and the fields of the final selected micro-content to build the quiz." />
     <MESSAGE value="feat: authentication with username against the Auth Server&#10;&#10;The user has to authenticate itself and he only can access the units after the existence of the username given is checked in the Auth Server." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: authentication with username against the Auth Server&#10;&#10;The user has to authenticate itself and he only can access the units after the existence of the username given is checked in the Auth Server." />
+    <MESSAGE value="feat: all requests directed to the General Manager" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: all requests directed to the General Manager" />
   </component>
   <component name="WindowStateProjectService">
     <state x="252" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1584637417999">
       <screen x="57" y="24" width="1863" height="1056" />
     </state>
     <state x="252" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog/57.24.1863.1056/1920.0.1920.1080@57.24.1863.1056" timestamp="1584637417999" />
-    <state x="59" y="135" key="CommitChangelistDialog2" timestamp="1585416268097">
+    <state x="59" y="135" key="CommitChangelistDialog2" timestamp="1591737766007">
       <screen x="57" y="24" width="1863" height="1056" />
     </state>
-    <state x="59" y="135" key="CommitChangelistDialog2/57.24.1863.1056/1920.0.1920.1080@57.24.1863.1056" timestamp="1585416268097" />
+    <state x="59" y="135" key="CommitChangelistDialog2/57.24.1863.1056/1920.0.1920.1080@57.24.1863.1056" timestamp="1591737766007" />
     <state x="776" y="283" width="424" height="482" key="FileChooserDialogImpl" timestamp="1585230165451">
       <screen x="57" y="24" width="1863" height="1056" />
     </state>
@@ -405,10 +412,10 @@
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2422" y="179" key="SettingsEditor/57.24.1863.1056/1920.0.1920.1080@57.24.1863.1056" timestamp="1585355917638" />
-    <state x="318" y="275" key="Vcs.Push.Dialog.v2" timestamp="1585416273194">
+    <state x="318" y="275" key="Vcs.Push.Dialog.v2" timestamp="1591737780907">
       <screen x="57" y="24" width="1863" height="1056" />
     </state>
-    <state x="318" y="275" key="Vcs.Push.Dialog.v2/57.24.1863.1056/1920.0.1920.1080@57.24.1863.1056" timestamp="1585416273194" />
+    <state x="318" y="275" key="Vcs.Push.Dialog.v2/57.24.1863.1056/1920.0.1920.1080@57.24.1863.1056" timestamp="1591737780907" />
     <state x="635" y="269" width="707" height="538" key="find.popup" timestamp="1591100250845">
       <screen x="57" y="24" width="1863" height="1056" />
     </state>
