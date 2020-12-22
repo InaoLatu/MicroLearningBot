@@ -15,6 +15,7 @@ import json
 import utils
 
 BOT_TOKEN = "729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0"  # Obtained from BotFather in Telegram app
+#BOT_TOKEN = "1482182869:AAH7lnHnhpvAoi4o0lDkyGQ-f4iYIP7d9pQ" # Obtained from BotFather in Telegram app
 URL_bot = "https://api.telegram.org/bot{}/".format(BOT_TOKEN)
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -33,7 +34,7 @@ id_telegram_user = ""
 auth_username = ""  # Username previously registered in the Auth Server
 
 # General Manager API where all the request of the Bot are directed to
-GENERAL_MANAGER_IP = "http://127.0.0.1:8500/general_manager/"
+GENERAL_MANAGER_IP = "http://192.168.0.20:8500/general_manager/"
 
 
 def start(update, context):
@@ -305,11 +306,21 @@ def get_micro_content(update, context):  # Gets the selected micro-content
                           micro_content['meta_data']['author'])
 
     bot.send_message(chat_id, text="Loading video...")
-    video = open('/home/inao/Trabajo/ElemendBot/media/videos/microlearning.mp4', 'rb')
+    
+    #MOD esto estaba hardcoded
+    #video = open('/home/inao/Trabajo/ElemendBot/media/videos/microlearning.mp4', 'rb')#OJO CORREGIR!!!
+    #bot.send_video(chat_id, video)
+    #sleep(15)
 
-    bot.send_video(chat_id, video)
-    # sleep(15)
 
+    #youtube video
+    video = micro_content['media'][0]['url']
+    bot.send_message(chat_id, text=video, parse_mode = "HTML")
+    #bot.send_video(chat_id, video)
+
+    #videofile
+    #video = open('/home/mario/dev/MicroLearningPlatform/media/Lenguaje_inclusivo_3.mp4','rb')
+    
     button_list = [
         InlineKeyboardButton("Yes!", callback_data="yes"),
     ]
@@ -338,7 +349,8 @@ def get_unit_micro_contents(update, context):  # Get the micro-content included 
         conv_handler.states[MENU2].append(
             CallbackQueryHandler(get_micro_content, pattern='^' + str(mc['id']) + '$'))  # Update states
 
-    button_list += [InlineKeyboardButton("Back to Units", callback_data="back")]
+    button_list += [InlineKeyboardButton("Back to Units", callback_data="back")] 
+    #button_list += [InlineKeyboardButton(request_string, callback_data="back")]
 
     reply_markup = InlineKeyboardMarkup(utils.build_menu(button_list, n_cols=2))
 
@@ -373,8 +385,8 @@ def get_units(update, context):
     req_string = GENERAL_MANAGER_IP + "check_user/telegram/" + str(update.effective_user.id)
     re = requests.get(req_string)
     if re.status_code == 404:
-        update.message.reply_text("Your must identify yourself first")
-        # authenticate(update, context)
+        update.message.reply_text("You must identify yourself first")
+        authenticate(update, context) #MOD estaba comentado?
         update.message.reply_text("Introduce your username: ")
         return AUTH
     else:
@@ -393,11 +405,15 @@ def get_units(update, context):
     return MENU1
 
 
+#ERROR: File "main.py", line 428, in back_to_units
+#       reply_markup=reply_markup
+#       TypeError: send_message() got an unexpected keyword argument 'message_id'
 def back_to_units(update, context):
     query = update.callback_query
     bot = context.bot
-
-    units = requests.get('http://127.0.0.1:7000/units').json()  # Call Authoring Tool API to get the Units available
+    #revisar
+    #units = requests.get('http://127.0.0.1:7000/units').json()  # Call Authoring Tool API to get the Units available
+    units = requests.get('http://192.168.0.20:7000/units').json()  # Call Authoring Tool API to get the Units available
     button_list = []
     conv_handler.states[MENU1] = []  # Clean previous states
 
@@ -410,7 +426,7 @@ def back_to_units(update, context):
 
     bot.send_message(
         chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
+        reply_to_message_id=query.message.message_id,
         text="Choose a Unit of micro content",
         reply_markup=reply_markup
     )
@@ -424,14 +440,17 @@ def authenticate(update, context, received_text):
             update.message.reply_text(received_text)
     except KeyError as e:
         pass
-    update.message.reply_text("Introduce your username: ")
+    update.message.reply_text("Introduce tu nombre de usuario: ")
     return AUTH
 
 # Check if there is a User with the given username and it assigns the update.effective_user.id value to the telegram_id field in the Auth Server that is accessed via General Manager
 def check_credentials(update, context):
-    username = update.message.text
+    username = update.message.text    
     request_string = GENERAL_MANAGER_IP + "identification_telegram/" + username + "/" + str(update.effective_user.id)
+    update.message.reply_text(request_string) #DEBUG
     re = requests.get(request_string)
+    #SEGUIR: no parece que legue a hacer correctamente el request.
+    #update.message.reply_text(re.text) #DEBUG
     if re.status_code == 200:
         context.user_data['auth_check'] = True
         update.message.reply_text("You successfully completed the identification!")
@@ -442,6 +461,7 @@ def check_credentials(update, context):
                                   "/cancel - Cancel the conversation whenever you want.")
     else:
         context.user_data['auth_check'] = False
+        #update.message.reply_text('llegó') #DEBUG
         authenticate(update, context, re.text)
 
 
