@@ -14,8 +14,8 @@ import requests
 import json
 import utils
 
-BOT_TOKEN = "729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0"  # Obtained from BotFather in Telegram app
-#BOT_TOKEN = "1482182869:AAH7lnHnhpvAoi4o0lDkyGQ-f4iYIP7d9pQ" # Obtained from BotFather in Telegram app
+#BOT_TOKEN = "729590852:AAFHIQhSbUcLzXyXhh7ieaSheWtD1IU1wT0"  # ElemendMicrolearningBot
+BOT_TOKEN = "1482182869:AAH7lnHnhpvAoi4o0lDkyGQ-f4iYIP7d9pQ" # InclusiBot
 URL_bot = "https://api.telegram.org/bot{}/".format(BOT_TOKEN)
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -141,7 +141,13 @@ def end_quiz(update, context):
         question = question.upper()
         selection = "You chose: " + selections[index] + "\n"
         block = block + question + selection
-        explanation = "Explanation: " + micro_content['quiz'][index]['explanation']
+        #MOD si no hay explicación, mostramos texto por defecto.
+        mc_explanation = micro_content['quiz'][index]['explanation']
+        if mc_explanation == '':
+            mc_explanation = 'No disponible.'
+
+        explanation = "Explanation: " + mc_explanation
+        
         if micro_content['quiz'][index]['answer'] == selections[index]:
             solution_message = "CORRECT! " + "\U0001F603" + "\n"
             block = block + solution_message
@@ -195,7 +201,7 @@ def show_wrong_answers(update, context):
 
     bot.send_message(
         chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
+        reply_to_message_id=query.message.message_id,
         text="*WRONG ANSWERS:*",
         parse_mode=telegram.ParseMode.MARKDOWN,
     )
@@ -203,7 +209,7 @@ def show_wrong_answers(update, context):
     for r in context.user_data['wrong_answers']:  # To print the block of each question
         bot.send_message(
             chat_id=query.message.chat_id,
-            message_id=query.message.message_id,
+            reply_to_message_id=query.message.message_id,
             text=r,
             parse_mode=telegram.ParseMode.MARKDOWN,
         )
@@ -213,7 +219,7 @@ def show_wrong_answers(update, context):
 
     bot.send_message(
         chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
+        reply_to_message_id=query.message.message_id,
         text="You can keep doing other micro content with the following command:\n\n"
              "/menu - Show you the available Units.",
         parse_mode=telegram.ParseMode.MARKDOWN,
@@ -228,7 +234,7 @@ def show_correct_answers(update, context):
 
     bot.send_message(
         chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
+        reply_to_message_id=query.message.message_id,
         text="*CORRECT ANSWERS:*",
         parse_mode=telegram.ParseMode.MARKDOWN,
     )
@@ -236,7 +242,7 @@ def show_correct_answers(update, context):
     for r in context.user_data['correct_answers']:  # To print the block of each question
         bot.send_message(
             chat_id=query.message.chat_id,
-            message_id=query.message.message_id,
+            reply_to_message_id=query.message.message_id,
             text=r,
             parse_mode=telegram.ParseMode.MARKDOWN,
         )
@@ -244,7 +250,7 @@ def show_correct_answers(update, context):
 
     bot.send_message(
         chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
+        reply_to_message_id=query.message.message_id,
         text="You can keep doing other micro content with the following command:\n\n"
              "/menu - Show you the available Units.",
         parse_mode=telegram.ParseMode.MARKDOWN,
@@ -256,10 +262,11 @@ def show_correct_answers(update, context):
 def show_all_answers(update, context):
     bot = context.bot
     query = update.callback_query
+    #print(query)
 
     bot.send_message(
         chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
+        reply_to_message_id=query.message.message_id,
         text="*ALL ANSWERS:*",
         parse_mode=telegram.ParseMode.MARKDOWN,
     )
@@ -267,7 +274,7 @@ def show_all_answers(update, context):
     for r in context.user_data['all_answers']:  # To print the block of each question
         bot.send_message(
             chat_id=query.message.chat_id,
-            message_id=query.message.message_id,
+            reply_to_message_id=query.message.message_id,
             text=r,
             parse_mode=telegram.ParseMode.MARKDOWN,
         )
@@ -275,7 +282,7 @@ def show_all_answers(update, context):
 
     bot.send_message(
         chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
+        reply_to_message_id=query.message.message_id, #MOD: message_id not working (send_message changed). Now reply_to_...
         text="You can keep doing other micro content with the following command:\n\n"
              "/menu - Show you the available Units.",
         parse_mode=telegram.ParseMode.MARKDOWN,
@@ -315,11 +322,12 @@ def get_micro_content(update, context):  # Gets the selected micro-content
 
     #youtube video
     video = micro_content['media'][0]['url']
-    bot.send_message(chat_id, text=video, parse_mode = "HTML")
+    bot.send_message(chat_id, text=video, parse_mode = "HTML")#cargando con autoplay no reproduce automáticamente ( + "?autoplay=1")
     #bot.send_video(chat_id, video)
 
-    #videofile
+    #videofile not working
     #video = open('/home/mario/dev/MicroLearningPlatform/media/Lenguaje_inclusivo_3.mp4','rb')
+    #bot.send_video(chat_id, video, supports_streaming = TRUE)
     
     button_list = [
         InlineKeyboardButton("Yes!", callback_data="yes"),
@@ -338,12 +346,14 @@ def get_unit_micro_contents(update, context):  # Get the micro-content included 
     unit = match.group(0)  # Unit selected in the display
     context.user_data["current_unit"] = str(unit)
     request_string = GENERAL_MANAGER_IP + "units/" + str(unit) + "/" + str(update.effective_user.id)
+    #DEBUG
+    #bot.send_message(query.message.chat_id, text=request_string)
     micro_content_list = requests.get(request_string).json()
 
     button_list = []
     for mc in micro_content_list:
         if mc['completed']:
-            button_list += [InlineKeyboardButton(mc['title']+" - completed", callback_data=str(mc['id']))]
+            button_list += [InlineKeyboardButton(mc['title']+" - completed", callback_data=str(mc['id']))] #TRANS
         else:
             button_list += [InlineKeyboardButton(mc['title'], callback_data=str(mc['id']))]
         conv_handler.states[MENU2].append(
