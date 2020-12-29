@@ -396,7 +396,7 @@ def get_units(update, context):
     re = requests.get(req_string)
     if re.status_code == 404:
         update.message.reply_text("You must identify yourself first")
-        authenticate(update, context) #MOD estaba comentado?
+        #authenticate(update, context ,re.text) #MOD estaba comentado?
         update.message.reply_text("Introduce your username: ")
         return AUTH
     else:
