@@ -34,7 +34,7 @@ id_telegram_user = ""
 auth_username = ""  # Username previously registered in the Auth Server
 
 # General Manager API where all the request of the Bot are directed to
-GENERAL_MANAGER_IP = "http://192.168.0.20:8500/general_manager/"
+GENERAL_MANAGER_IP = "http://192.168.0.26:7030/general_manager/"
 
 
 def start(update, context):
@@ -305,6 +305,8 @@ def get_micro_content(update, context):  # Gets the selected micro-content
     micro_content_id = match.group(0)  # Id of the micro content selected in the display
     context.user_data['mc_id'] = micro_content_id
 
+    print("MICROCONTENT " + micro_content_id)
+
     global micro_content  # Edit the global value of micro_content so the rest of the functions see the same value
     micro_content = requests.get(GENERAL_MANAGER_IP + 'microcontent?id=' + str(micro_content_id)).json()
 
@@ -344,20 +346,21 @@ def get_unit_micro_contents(update, context):  # Get the micro-content included 
     bot = context.bot
     match = context.match
     unit = match.group(0)  # Unit selected in the display
+    print("UNIDADE " + unit)  # DEBUG
     context.user_data["current_unit"] = str(unit)
     request_string = GENERAL_MANAGER_IP + "units/" + str(unit) + "/" + str(update.effective_user.id)
     #DEBUG
-    #bot.send_message(query.message.chat_id, text=request_string)
+    print(request_string)
     micro_content_list = requests.get(request_string).json()
 
     button_list = []
     for mc in micro_content_list:
         if mc['completed']:
-            button_list += [InlineKeyboardButton(mc['title']+" - completed", callback_data=str(mc['id']))] #TRANS
+            button_list += [InlineKeyboardButton(mc['title']+" - completed", callback_data=str(mc['micro_id']))] #TRANS
         else:
-            button_list += [InlineKeyboardButton(mc['title'], callback_data=str(mc['id']))]
+            button_list += [InlineKeyboardButton(mc['title'], callback_data=str(mc['micro_id']))]
         conv_handler.states[MENU2].append(
-            CallbackQueryHandler(get_micro_content, pattern='^' + str(mc['id']) + '$'))  # Update states
+            CallbackQueryHandler(get_micro_content, pattern='^' + str(mc['micro_id']) + '$'))  # Update states
 
     button_list += [InlineKeyboardButton("Back to Units", callback_data="back")] 
     #button_list += [InlineKeyboardButton(request_string, callback_data="back")]
@@ -423,7 +426,7 @@ def back_to_units(update, context):
     bot = context.bot
     #revisar
     #units = requests.get('http://127.0.0.1:7000/units').json()  # Call Authoring Tool API to get the Units available
-    units = requests.get('http://192.168.0.20:7000/units').json()  # Call Authoring Tool API to get the Units available
+    units = requests.get('http://192.168.0.26:7020/units').json()  # Call Authoring Tool API to get the Units available
     button_list = []
     conv_handler.states[MENU1] = []  # Clean previous states
 
@@ -443,8 +446,8 @@ def back_to_units(update, context):
 
     return MENU1
 
-
-def authenticate(update, context, received_text):
+# Metinlle "" ao parámetro received_text
+def authenticate(update, context, received_text=""):
     try:
         if not context.user_data['auth_check']:  # If the user data fails the authentication this message is shown
             update.message.reply_text(received_text)
@@ -457,7 +460,7 @@ def authenticate(update, context, received_text):
 def check_credentials(update, context):
     username = update.message.text    
     request_string = GENERAL_MANAGER_IP + "identification_telegram/" + username + "/" + str(update.effective_user.id)
-    update.message.reply_text(request_string) #DEBUG
+    #update.message.reply_text(request_string) #DEBUG
     re = requests.get(request_string)
     #SEGUIR: no parece que legue a hacer correctamente el request.
     #update.message.reply_text(re.text) #DEBUG
@@ -471,7 +474,7 @@ def check_credentials(update, context):
                                   "/cancel - Cancel the conversation whenever you want.")
     else:
         context.user_data['auth_check'] = False
-        #update.message.reply_text('llegó') #DEBUG
+     #   update.message.reply_text('llegó'+re.text[0:20]+'aquí') #DEBUG
         authenticate(update, context, re.text)
 
 
