@@ -103,7 +103,7 @@ def q2(update, context):  # Shows the second question of the quiz and returns to
     reply_keyboard = build_keyboard([choices[0]['choice_text'], choices[1]['choice_text'], choices[2]['choice_text']])
 
     update.message.reply_text(
-        "Question " + str(2) + ": " + micro_content['quiz'][1]['question'],
+        "Pregunta " + str(2) + ": " + micro_content['quiz'][1]['question'],
         reply_markup=reply_keyboard)
     return Q3
 
