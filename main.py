@@ -156,7 +156,7 @@ def end_quiz(update, context):
             correct_answers.append(block)
             correct = correct + 1
         else:
-            solution_message = "Incorrecto " + "\U0001F641" + "\n"
+            solution_message = "INCORRECTO " + "\U0001F641" + "\n"
             correct_answer = "Respuesta correcta: " + micro_content['quiz'][index]['answer'] + "\n"
             block = block + solution_message + correct_answer
             block = block + explanation
