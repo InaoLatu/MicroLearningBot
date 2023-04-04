@@ -1,4 +1,6 @@
 # MicroLearningBot
+Telegram Bot built to allow the students to consume the micro-content within the different Units of knowledge (Maths, Science, etc).
+
 Bot that takes a micro-content in JSON format and allows to consume that micro-content so the following messages are show:
 
 Firstly, a Menu is displayed with all the Units of micro content. The user can select the micro-content inside these Units.
