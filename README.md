@@ -1,7 +1,9 @@
 # MicroLearningBot
 Piece of [MicrolearningPlatform](https://github.com/InaoLatu/MicroLearningPlatform) project.
 
-Telegram Bot built to allow the students to consume the micro-content within the different Units of knowledge (Maths, Science, etc).
+@microlearningbot_bot in Telegram.
+
+Bot built to allow the students to consume the micro-content within the different Units of knowledge (Maths, Science, etc).
 
 Bot that takes a micro-content in JSON format and allows to consume that micro-content so the following messages are show:
 
