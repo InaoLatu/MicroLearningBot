@@ -16,15 +16,21 @@ Thirdly, the quiz starts and the users answers the questions, each one at a time
 Finally, the user receives a numeric result and a feedback with the solutions and explanations for each question.
 
 # Some pics
-Initial configuration: 
-![Initial configuration](/media/images/config.jpg)
+Initial configuration:
+
+<img src="media/images/config.jpg"  width="300" height="300">
 
 Starting the micro-content:
-![Starting the micro-content](/media/images/start.jpg)
+
+<img src="media/images/start.jpg"  width="300" height="300">
+
 
 Answering a question:
-![Answering a question](/media/images/question.jpg)
+
+<img src="media/images/question.jpg"  width="300" height="300">
 
 Results:
-![Results](/media/images/results.jpg)
+
+<img src="media/images/results.jpg"  width="180" height="300">
+
 
